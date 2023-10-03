@@ -1,4 +1,3 @@
-import 'package:api/Api%20Service/Api.dart';
 import 'package:api/Model/Blogs.dart';
 import 'package:api/Provider/BlogProvider.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     
-    // TODO: implement initState
-    List<Blogs> myBlogs = Provider.of<BlogProvider>(context, listen: false).blogs;
-    print("Data = ");
-    print(myBlogs);
+    Provider.of<BlogProvider>(context, listen: false).getAllBlogs();
+    
  
   }
   
@@ -30,20 +27,24 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Text("Hello Welcome to ListView"),
         ),
-        body:ListView.separated(
-            // scrollDirection: Axis.vertical,
-            itemCount: allData.length,
-            separatorBuilder: (context,_) => SizedBox(width: 12),
-            itemBuilder: (context,index) => buildCard(allData[index]),
-          ),
+        body:Consumer<BlogProvider>(
+          builder: (context, value, child) {
+            final blogs = value.blogs;
+            return ListView.builder(
+              itemCount: blogs.length,
+              itemBuilder: (context,index) => buildCard(blogs[index]),
+            );
+          }
+        ),
         ),
       );
   }
 
-  Widget buildCard(dynamic data) {
+  Widget buildCard(Blogs data) {
   return Container(
     width: 200,
     height: 200,
+    padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
     decoration: BoxDecoration(
       color: Colors.green, // Background color
       border: Border.all(
@@ -54,11 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
     child: Column(
       children: [
         Text(
-          data['title'], // Replace with the key for the title in your API data
+          data.title.toString(), // Replace with the key for the title in your API data
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Image.network(
-          data['image_url'],
+          data.image.toString(),
           width: 200, // Set the width to the desired size
           height: 150, // Set the height to the desired size
         ),
