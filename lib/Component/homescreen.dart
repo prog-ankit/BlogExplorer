@@ -1,5 +1,8 @@
 import 'package:api/Api%20Service/Api.dart';
+import 'package:api/Model/Blogs.dart';
+import 'package:api/Provider/BlogProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,13 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     
     // TODO: implement initState
-    fetchData();
+    List<Blogs> myBlogs = Provider.of<BlogProvider>(context, listen: false).blogs;
+    print("Data = ");
+    print(myBlogs);
+ 
   }
-  fetchData() async{
-    allData = await Api.fetchBlogs();
-    setState(() { });
-    print(allData);
-  }
+  
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(

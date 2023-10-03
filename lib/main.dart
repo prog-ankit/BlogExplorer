@@ -1,4 +1,6 @@
+import 'package:api/Provider/BlogProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Component/homescreen.dart';
 
 void main() {
@@ -15,9 +17,10 @@ class Myapp extends StatefulWidget {
 class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home:HomeScreen(),
-    );
+    return ChangeNotifierProvider(create: (context) => BlogProvider(),
+    child: const MaterialApp(
+      home: HomeScreen(),
+    ),);
   }
 }
 
