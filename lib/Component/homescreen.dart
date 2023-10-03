@@ -13,6 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    
     // TODO: implement initState
     fetchData();
   }
@@ -22,63 +23,48 @@ class _HomeScreenState extends State<HomeScreen> {
     print(allData);
   }
   Widget build(BuildContext context) {
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("Hello Welcome to ListView"),
         ),
-        body: Container(
-          height: 250,
-          child:SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-                buildCard(),
-                SizedBox(width: 20),
-              ],
-            ),
-          )
+        body:ListView.separated(
+            // scrollDirection: Axis.vertical,
+            itemCount: allData.length,
+            separatorBuilder: (context,_) => SizedBox(width: 12),
+            itemBuilder: (context,index) => buildCard(allData[index]),
+          ),
         ),
-      ),
-
-    );
-
+      );
   }
 
-  Widget buildCard() {
-    return Container(
-        width: 200,
-      height: 200,
-      color: Colors.red,
-      child: Column(
-      children : [
+  Widget buildCard(dynamic data) {
+  return Container(
+    width: 200,
+    height: 200,
+    decoration: BoxDecoration(
+      color: Colors.green, // Background color
+      border: Border.all(
+        color: Colors.blue, // Border color
+        width: 2.0,         // Border width
+      ),
+    ),
+    child: Column(
+      children: [
+        Text(
+          data['title'], // Replace with the key for the title in your API data
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         Image.network(
-          'https://t4.ftcdn.net/jpg/05/47/97/81/360_F_547978128_vqEEUYBr1vcAwfRAqReZXTYtyawpgLcC.jpg'
+          data['image_url'],
+          width: 200, // Set the width to the desired size
+          height: 150, // Set the height to the desired size
         ),
         const SizedBox(height: 4),
-        Text('SingleChildScrollView is especially useful for creating forms,',
-        style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold)
-          ,)
-      ]
-    )
-    );
-  }
-
+      ],
+    ),
+  );
+}
 
 }
 
