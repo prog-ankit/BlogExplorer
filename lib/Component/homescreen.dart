@@ -42,28 +42,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildCard(Blogs data) {
   return Container(
-    width: 200,
-    height: 200,
     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-    decoration: BoxDecoration(
-      color: Colors.green, // Background color
-      border: Border.all(
-        color: Colors.blue, // Border color
-        width: 2.0,         // Border width
-      ),
+    decoration: const BoxDecoration(
+      color: Colors.black87, // Background color
     ),
     child: Column(
       children: [
-        Text(
-          data.title.toString(), // Replace with the key for the title in your API data
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
         Image.network(
           data.image.toString(),
-          width: 200, // Set the width to the desired size
-          height: 150, // Set the height to the desired size
+          fit: BoxFit.fill,
         ),
-        const SizedBox(height: 4),
+        Text(
+          data.title.toString(),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        
+        const SizedBox(height: 10),
       ],
     ),
   );

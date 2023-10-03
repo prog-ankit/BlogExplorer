@@ -14,9 +14,10 @@ class Api {
 
       if (response.statusCode == 200) {
         // Request successful, handle the response data here
-        print('Response data: ${response.body}');
+       // print('Response data: ${response.body}');
         final body  =response.body;
-        final json = jsonDecode(body);
+        final json = jsonDecode(body)["blogs"] as List;
+     //   print(json);
         final blogs = json.map(
           (b){
             return Blogs(

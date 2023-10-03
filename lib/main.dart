@@ -18,8 +18,9 @@ class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(create: (context) => BlogProvider(),
-    child: const MaterialApp(
+    child: MaterialApp(
       home: HomeScreen(),
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black),
     ),);
   }
 }
