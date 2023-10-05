@@ -41,7 +41,6 @@ class DetailPage extends StatelessWidget {
 
           ],
         ),
-
       ),
     );
   }
