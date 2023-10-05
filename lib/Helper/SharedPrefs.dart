@@ -16,8 +16,7 @@ class Helper {
     List<Blogs> saved;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? data = sharedPreferences.getString("saved");
-    print("Data");
-    print(data);
+    
     if(data == null || data == '') {
       saved = [];
     }else{

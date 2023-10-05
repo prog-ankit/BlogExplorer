@@ -10,7 +10,7 @@ class Blogs {
     return Blogs(
       id: jsonData['id'],
      title:  jsonData['title'],
-     image: jsonData['image_url']
+     image: jsonData['image']
     );
   }
 

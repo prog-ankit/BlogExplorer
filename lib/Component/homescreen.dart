@@ -5,6 +5,7 @@ import 'package:api/Model/Blogs.dart';
 import 'package:api/Provider/BlogProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,6 +18,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Provider.of<BlogProvider>(context, listen: false).getAllBlogs();
+  }
+
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+  void showSnack(String title) {
+    final snackbar = SnackBar(
+        content: Text(
+      title,
+      style: const TextStyle(
+          fontSize: 15, color: Colors.white, backgroundColor: Colors.black),
+    ));
+    scaffoldMessengerKey.currentState!.showSnackBar(snackbar);
   }
 
   Widget build(BuildContext context) {
@@ -50,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildCard(Blogs data) {
+    // print("testing");
+    // print(data.image.toString());
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -65,47 +80,63 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: const BoxDecoration(
             color: Colors.black87, // Background color
           ),
-          child: Column(
-            children: [
-              Image.network(
-                data.image.toString(),
-                fit: BoxFit.fill,
-              ),
-              const SizedBox(height: 5),
-              Row(
+          child: Column(children: [
+            Image.network(
+              data.image.toString(),
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 5),
+            Container(
+              // width: MediaQuery.of(context).size.width*0.8,
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    data.title.toString(),
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  // RichText(text: TextSpan(text: data.title.toString())),
+                  Flexible(
+                    child: Text(
+                      data.title.toString(),
+                      maxLines: 3,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
+
                   IconButton(
                       onPressed: () async {
+                        // print(data.image.toString());
                         List<Blogs> savedBlogs = await Helper.get_blog();
                         bool noadd = false;
                         for (Blogs b in savedBlogs) {
                           if (b.id == data.id) {
                             noadd = true;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                'Already Exists in Favorite',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              backgroundColor: Colors.black,
-                            ));
+                            
+                            Fluttertoast.showToast(
+                                msg: "Blog Already Exists!!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 2,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.white,
+                                fontSize: 14.0);
                           }
                         }
                         if (!noadd) {
                           savedBlogs.add(data);
+                          //   print(data);
+                          // print(savedBlogs.toString());
                           Helper.save_blog(savedBlogs);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('A SnackBar has been shown.'),
-                            ),
-                          );
+                          Fluttertoast.showToast(
+                                msg: "Blog Added to Favorite!!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 2,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.white,
+                                fontSize: 14.0);
+                          
                         }
                       },
                       icon: Icon(
@@ -114,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       )),
                 ],
               ),
-            ],
-          ),
+            ),
+          ]),
         ),
       ),
     );

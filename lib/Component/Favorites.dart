@@ -1,6 +1,7 @@
 import 'package:api/Helper/SharedPrefs.dart';
 import 'package:api/Model/Blogs.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Favorites extends StatefulWidget {
@@ -29,23 +30,22 @@ class _FavoritesState extends State<Favorites> {
 
   @override
   Widget build(BuildContext context) {
+    print(_favorite.toString());
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.arrow_back_ios)),
-        title: const Text(
-          "Favorite Blogs",
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(Icons.arrow_back_ios)),
+          title: const Text(
+            "Favorite Blogs",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      body: ListView.builder(
-            itemCount: _favorite.length,
-            itemBuilder: (context, index) => buildCard(_favorite[index]),
-          )
-        
-    );
+        body: ListView.builder(
+          itemCount: _favorite.length,
+          itemBuilder: (context, index) => buildCard(_favorite[index]),
+        ));
   }
 
   Widget buildCard(Blogs data) {
@@ -66,29 +66,37 @@ class _FavoritesState extends State<Favorites> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  data.title.toString(),
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                Flexible(
+                  child: Text(
+                    data.title.toString(),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
                 IconButton(
                     onPressed: () async {
                       List<Blogs> savedBlogs = await Helper.get_blog();
+                      
                       for (Blogs b in savedBlogs) {
-                        if (b.id == data.id) savedBlogs.remove(b);
+                        if (b.id == data.id) {
+                          savedBlogs.remove(b);
+                          break;
+                        }
                       }
                       _favorite = savedBlogs;
                       setState(() {});
                       Helper.save_blog(savedBlogs);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          'Blog Removed from Favorite',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.black,
-                      ));
+                      Fluttertoast.showToast(
+                                msg: "Blog Removed from Favorite!!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 2,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.white,
+                                fontSize: 14.0);
+                          
                     },
                     icon: Icon(
                       Icons.bookmark_outline,
